@@ -1,0 +1,31 @@
+html, body
+{
+	height: 100%;
+	width: 100%;
+}
+
+#img {
+	top: 25px;
+	height: 60px;
+	margin-left: 25px;
+	transition: 0.4s;
+	position: fixed;
+}
+
+#img:hover {
+	height: 75px;
+	transform: translate(-10%, -10%);
+}
+
+h1 {
+	margin-bottom: 30px;
+	color: rgb(47, 47, 47);
+}
+
+#togglePasswordView {
+	cursor: pointer;
+}
+
+.status {
+	display: none;
+}

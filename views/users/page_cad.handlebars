@@ -1,0 +1,161 @@
+<head>
+	<title>Cadastro</title>
+	<link rel="stylesheet" type="text/css" href="/css/cadastro.css">
+</head>
+
+<body>
+	{{>nav_bar}}
+	{{#each errors}}
+		<div class="alert alert-danger text-center">Informações inválidas, por favor, cheque novamente</div>
+	{{else}}
+	{{/each}}
+	<div id="form" class="p-5 mt-5 rounded container d-flex justify-content-center border w-25">
+		<hr>
+		<div class="w-100 container justify-content-center">
+			<form method="POST" action="/usuario/cadastrar">
+				<h3 class="text-center">Cadastrar usuário</h3>
+				<hr>
+				{{!-- Email --}}
+				<label for="email">E-mail</label>
+				<small id="status-email" class="status alert-danger rounded p-1">Email não valido</small>
+				<input class="form-control mb-2" id="email" type="email" name="email" placeholder="seuemail@email.com" required>
+				{{!-- Nome --}}
+				<label for="nome">Nome</label>
+				<input class="form-control mb-2" id="name" type="text" name="name" placeholder="Seu nome" required>
+				{{!-- Senha --}}
+				<label for="password">Senha</label>
+
+				
+				<div class="d-block mb-2">
+					<small id="status-password" class="status alert-danger p-1 rounded">Senhas diferentes</small>
+					<small id="password-size" class="status alert-danger p-1 rounded">A senha deve ter no mínimo 4 caracteres</small>
+				</div>
+				<div class="d-flex border mb-2">
+					<input class="form-control border-0 password" type="password" id="password" name="password" placeholder="Insira sua senha" required>
+					<img id="passwordView"class="p-2" src="/img/bootstrap-icons/eye-fill.svg" alt="Mostrar/Esconder senha">
+				</div>
+				{{!-- Repetir senha --}}
+				<label for="password-confirm">Repita sua senha</label>
+				<div class="d-flex border mb-2">
+					<input class="form-control border-0 password" type="password" id="password-confirm" name="password-confirm" placeholder="Confirme sua senha" required>
+					<img id="passwordConfirmView" class="p-2" src="/img/bootstrap-icons/eye-fill.svg" alt="Mostrar/Esconder senha">
+				</div>
+				{{!-- Submit --}}
+				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-primary" id="submit-cad">Cadastrar usuário</button>
+				</div>
+				</div>
+			</form>	
+		</div>
+	</div>
+</body>
+<script src="/js/jquery.js"></script>
+<script src="/js/forms.js"></script>
+<script src="/js/jQuery-Mask-Plugin-master/src/jquery.mask.js"></script>
+<script>
+	document.getElementById("password").addEventListener("keypress", function() {
+		$("#password-confirm").fadeIn("slow");
+	}, {
+		once: true
+	});
+
+	let userVer = true;
+	let passVer = false;
+	let passSize = false;
+	let telVer = true;
+	let emailVer = false;
+
+	//verificao usuario
+
+	["keypress", "paste"].forEach(evtType => {
+		document.getElementById("name").addEventListener(evtType, function(event) {
+			if (blockChar(["'", '"', '`'], event)) {
+				event.preventDefault();
+			}
+		});
+	});
+
+/*	document.getElementById("name").addEventListener("change", function() {
+		let dados = new FormData();
+		dados.append("username", $("#name").val());
+		$.ajax({
+			url: "verifyCad.php",
+			method: "post",
+			data: dados,
+			processData: false,
+			contentType: false,
+			success: function(resposta) {
+				let res = resposta.split('|');
+				if (res[0] != 'Ok') {
+					$("#status-username").show();
+					userVer = false;
+				} else {
+					userVer = true;
+					$("#status-username").hide();
+				}
+			},
+
+			error: function(error) {
+				console.log(error);
+			}
+		});
+	});*/
+
+	//verificao email
+	document.getElementById("email").addEventListener("focusout", function() {
+		
+		if (document.getElementById("email").checkValidity()) {
+			$("#status-email").hide();
+			emailVer = true;
+		} else {
+			$("#status-email").show();
+			emailVer = false;
+		}
+
+	});
+
+	//verificao senha
+	document.querySelectorAll(".password").forEach(item => {
+		item.addEventListener("change", function() {
+			let senha = document.getElementById("password").value;
+			let senhaCon = document.getElementById("password-confirm").value;
+			if (senha != senhaCon) {
+				passVer = false;
+				$("#status-password").show();
+			} else {
+				passVer = true;
+				$("#status-password").hide();
+			}
+			if (senha.length < 4) {
+				passSize = false;
+				$("#password-size").show();
+			} else {
+				$("#password-size").hide();
+				passSize = true;
+			}
+		});
+	});
+
+	//check antes do submit
+	document.querySelector("#submit-cad").addEventListener("click", function(event) {
+		console.log("UserVeri: " + userVer + "\nPassVer: " + passVer + "\ntelVer: " + telVer + "\nemailVer: " + emailVer + "\npassSize: " + passSize);
+		if (userVer && passVer && passSize && telVer && emailVer) {
+			$("#tel").unmask();
+			alert("Cadastrado com sucesso!");
+		} else {
+			alert("Preencha corretamente todos os campos.");
+			event.preventDefault();
+		}
+	});
+
+	//mostrar e esconder senha
+	let btnPasswordView = document.getElementsByClassName("passwordView");
+	let senhaInput = document.getElementById("password");
+	
+	togglePasswordView(document.getElementById("passwordView"), document.getElementById("password"))
+	togglePasswordView(document.getElementById("passwordConfirmView"), document.getElementById("password-confirm"))
+
+	$("#tel").mask("(00) 00000-0000");
+</script>
+
+</html>

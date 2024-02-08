@@ -1,0 +1,110 @@
+/**
+ * jQuery  Bootstrap year calendar 1.0.0
+ * Copyright 2018, Allset
+ * Licensed under the MIT license.
+
+ * @author Piotr Zatorski
+ */
+.jqyc 
+{
+    overflow-x: wrap;
+}
+
+.jqyc-months .table td, .jqyc-months .table th {
+    border-top: 0px;
+    text-align: center;
+}
+
+#jqyc-months
+{
+    height: 200px !important;
+}
+
+
+#jqyc-months-div
+{
+    text-align: center;
+    justify-content: center;
+}
+
+.jqyc-month
+{
+    height: 0px !important;
+}
+
+.jqyc-not-empty-td:hover {
+    cursor: pointer;
+    background-image: linear-gradient(to bottom right, #007bff, #0000ff);
+    color: #FFF;
+    border-radius: 0.25rem;
+}
+
+.jqyc-not-empty-td:hover .text-danger {
+    color: #FFF !important;
+}
+
+.jqyc-year-chooser .jqyc-year {
+    text-align: center;
+}
+
+.jqyc-year-chooser {
+    padding-bottom: 15px;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.jqyc-appended{
+    background-image: linear-gradient(to bottom right, #007bff, #0000ff);
+}
+
+.jqyc-start-day-of-month {
+    background-image: linear-gradient(to bottom right, #007bff, #0000ff);
+    color: #FFF;
+    border-radius: 0.25rem;
+}
+
+.jqyc-end-day-of-month {
+    background-image: linear-gradient(to bottom right, #007bff, #0000ff);
+    color: #FFF;
+    border-radius: 0.25rem;
+}
+
+
+.jqyc-range-choosen-between{
+    background-image: linear-gradient(to bottom right, #007bff, #0000ff);
+    color: #FFF;
+    border-radius: 0.25rem;
+}
+
+.jqyc-change-year
+{
+    background-color: #007bff;
+    color: white;
+    border: none !important;
+    border-radius: 5px !important;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.jqyc-next-year
+{
+    background-color: #003bff;
+}
+
+.col
+{
+    font-size: 20 !important;
+}
+
+.jqyc-year
+{
+    font-size: 24 !important;
+}
+
+.text-right,
+.text-left
+{
+    padding: 0px !important;  
+}
+

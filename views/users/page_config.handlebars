@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/config.css">
+    <title>Configurações</title>
+</head>
+
+<body>
+    {{>nav_bar}}
+    {{#if error}}
+        <div class="alert alert-danger text-center">{{error}}</div>
+    {{/if}}
+    {{#if success_msg}}
+        <div class="alert alert-success text-center">{{success_msg}}</div>
+    {{/if}}
+    <div id="main-div" class="container d-flex justify-content-center p-5 mt-5 rounded border w-25">
+        <div class="w-75">
+            <h3 class="text-center">Suas informações</h3>
+            <hr>
+
+            <form id="config-form" method="POST" action="/usuario/atualizar">
+                <!-- Email -->
+                <div class="campo">
+                    <label for="email">Email</label>
+                    <input class="form-control info-input disabled" type="email" id="email" name="email" value="{{user.email}}">
+                    <p id="status-email" class="alert-danger m-1 p-1 rounded"> * Este email não é válido.</p>
+                    <p id="status-email-usado" class="alert-danger m-1 p-1 rounded"> * Este email já está sendo usado.</p>
+                </div>
+                
+                <!-- Nome -->
+
+                <div class="campo">
+                    <label for="nome" class="titulo-campo mt-2">Nome</label>
+                    <input class="form-control info-input disabled" type="text" id="name" name="name" value="{{user.name}}">
+                    <p id="status-nome" class="alert-danger m-1 p-1 rounded"> * Seu nome não pode ser vázio.</p>
+                </div>
+                <hr>
+                <!-- Senha -->
+                <div class="border p-3 mt-4">
+                    <div class="campo" id="camposSenha">
+                        <div id="senha-aviso">
+                            <label for="senha" class="titulo-campo d-inline-flex">Nova senha</label>
+                        </div>
+                        <div class="border mb-2 d-flex">
+                            <input class="form-control info-input border-0 password" type="password" id="password" name="password" placeholder="*****">
+                            <img class="p-2" draggable="false" id="passwordView" height="34" src="/img/bootstrap-icons/eye-fill.svg" alt="Mostrar/Esconder senha">
+                        </div>
+
+
+                        <div id="password-form">
+                            <label for="password-confirm">Confirmar nova senha</label>
+                            <div class="border mb-2 d-flex" id="divConfirmarSenha">
+                                <input class="form-control info-input disabled password border-0" type="password" id="password-confirm" name="password-confirm" placeholder="*****" required>
+                                <img id="conPasswordView" src="/img/bootstrap-icons/eye-fill.svg" alt="Mostrar/esconder senha" class="p-2">
+                            </div>
+                        </div>
+                        
+                        <p id="status-senha" class="alert-danger m-2 p-1 rounded"> * As senhas não estão iguais.</p>
+                        <p id="status-senha-size" class="alert-danger p-1 m-1 rounded" > * As senhas devem ter no mínimo 4 caracteres.</p>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary mt-1" id="btn-submit"> Salvar alterações </button>    
+                </div>
+                <div id="alert-submit" class="mt-2 p-2 w-100">
+                    <p class="alert-danger p-1 m-1 rounded" > <b>*</b> Erro ao salvar alterações <b class="text-center">Campo(s) inválido(s)</b></p>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+    </html>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/jQuery-Mask-Plugin-master/src/jquery.mask.js"></script>
+    <script src="/js/forms.js"></script>
+    <script>
+    let username = document.getElementById("name").value;
+    // Status modificacao
+    let userModificado = false;
+    let senhaModificada = false;
+    let emailModificado = false;
+    // Status validacao
+    let emailVer = true;
+    let nameVer = true;
+    let passSize = true;
+    let passVer = true;
+
+    
+    // Checa se esta tudo certo antes do submit
+
+    document.getElementById("config-form").addEventListener("submit", (e) => {
+        console.log("email : " + emailVer + " ! name : " + nameVer + " ! passsize: " + passSize + " ! passver : " + passVer) 
+        if (!emailVer || !nameVer || !passSize || !passVer) {
+            e.preventDefault()
+            document.getElementById("alert-submit").style.display = "flex"
+        }
+    })
+
+    // Validacao Email
+
+    document.getElementById("email").addEventListener("focusout", function() {
+        emailModificado = true;
+        if (document.getElementById("email").checkValidity() && document.getElementById("email").value != "") {
+            document.getElementById("status-email").style.display = "none"
+            emailVer = true;
+        } else {
+            document.getElementById("status-email").style.display = "flex"
+            emailVer = false
+        };
+    });
+
+    document.getElementById("email").addEventListener("focusout", function() {
+        const emailData = new FormData()
+        emailData.append("email", document.getElementById("email").value)
+        const request = async () => {
+            const fetchUrl = "https://localhost:8081/usuario/email"
+            const response = await fetch(fetchUrl, {
+                method: "POST",
+                mode: "same-origin",
+                cache: "no-cache",
+                credentials: "same-origin",
+                headers: {
+                    "Content-type" : "application/json"
+                },
+                redirect: "follow",
+                referrerPolicy: "no-referrer",
+                body: JSON.stringify(emailData),
+            })
+            return response.json()
+        }
+
+        request().then((data) => {
+            console.log(data)
+        })
+    });
+
+    // Validacao nome
+
+    document.getElementById("name").addEventListener("focusout", function() {
+        emailModificado = true;
+        if (document.getElementById("name").value != "") {
+            document.getElementById("status-nome").style.display = "none"
+            nameVer = true;
+        } else {
+            document.getElementById("status-nome").style.display = "flex"
+            nameVer = false
+        };
+    });
+
+    // Mostra e esconde a senha
+
+    togglePasswordView(document.getElementById("passwordView"), document.getElementById("password"));
+    togglePasswordView(document.getElementById("conPasswordView"), document.getElementById("password-confirm"));
+    let pswdInput = document.getElementById("password");
+    pswdInput.addEventListener("keypress", function() {
+        $("#divConfirmarSenha").fadeIn("slow");
+    });
+
+    let btnChgPass = document.getElementById("btn-change-password");
+
+   // Habilita Campo de confirmar senha enquanto o primeiro estiver preenchido
+    document.getElementById("password").addEventListener("input", () => {
+        if (document.getElementById("password").value != "")
+            document.getElementById("password-form").style.display = "block"
+        else
+            document.getElementById("password-form").style.display = "none"
+    })
+
+    // Valida Senha
+    let passwordsInput = [document.getElementById("password"), document.getElementById("password-confirm")]
+
+    for (let i = 0; i < passwordsInput.length; i++) {
+        passwordsInput[i].addEventListener("input", () => { 
+            let equalsPassword = document.getElementById("password").value == document.getElementById("password-confirm").value ? true : false
+            passVer = equalsPassword
+            if (passVer) {
+                document.getElementById("status-senha").style.display = "none"
+                let display = document.getElementById("password").value.length >= 4 ? "none" : "flex";
+                passSize = display == "none" ? true : false; 
+                document.getElementById("status-senha-size").style.display = display
+            } else
+                document.getElementById("status-senha").style.display = "block"
+        })
+    }
+
+</script>

@@ -1,0 +1,127 @@
+{{>nav_bar}}
+<div id="main-body">
+    <div id="body">
+
+        <!-- Calendário -->
+        <div class="container">
+            <div class="calendar"></div>
+        </div>
+
+        <!-- Popup -->
+        <div id="box">
+            <div id="popup">
+                <div id="list-events">
+                    <div id="header-events">
+                        <button onclick="hidePopup()" id="close"><img src="img/popup_exit.png"></button>
+                        <h2 id="list-title">Eventos</h2>
+                        <small id="eventDay">Eventos</small>
+                        <h3 id="addEventButton" style="cursor: pointer;" onclick=" $('#delete').hide();">+</h3>
+                    </div>
+                    <div id="events"></div>
+                </div>
+                <!-- Formulário de Evento -->
+                <div id="form-evento" style="display: none;">
+                    <div id="div-close">
+                        <button id="back" onclick="$('#list-events').show(); $('#popup-pessoa').hide(); $('#form-evento').hide();">
+                            <img id="close-img" src="/img/arrow-left.svg">  
+                        </button>
+                        <button onclick="hidePopup()" id="close-form-event">
+                            <img src="/img/popup_exit.png">
+                        </button>
+                    </div>
+                    <div id="pessoas">
+                        <div id="add-person-img">
+                            <img draggable="false" src="/img/add_usuario.png" height="50px" id="add-pessoa" onclick="$('#popup-pessoa').show(); $('#popup').hide();"></img>
+                        </div>
+                        <div id="list-pessoas"></div>
+                    </div>
+                    <input type="hidden" name="data_hora" id="datetime" value="">
+                    <input type="hidden" name="eventId" id="event-id" value="nenhum">
+                    <input type="text" name="titulo" id="title" placeholder="Título" required>
+                    <textarea type="text" name="mensagem" id="message" rows="2" placeholder="Mensagem" required></textarea>
+                    <div id="extra-options">
+                        <div class="extra-options-div">
+                            <label class="label">Dias antes do evento</label>
+                            <input type="number" name="dayInterval" id="dia_interval" value="0" min="0" max="14" required></input>
+                        </div>
+                        <div class="extra-options-div">
+                            <label class="label">Horário da notificação</label>
+                            <input type="time" name="horarioNotif" id="notifHour" value="00:00"></input>
+                        </div>
+                        <div class="extra-options-div">
+                            <label class="label">Notificar uma vez</label>
+                            <input type="checkbox" name="todosDias" id="oneNotif" class="checkbox" value="1"></input>
+                        </div>
+                        <div class="extra-options-div">
+                            <label class="label">Repetir mensalmente</label>
+                            <input type="checkbox" name="todoMes" id="mensalNotif" class="checkbox" value="1"></input>
+                        </div>
+                    </div>
+                    <div id="form-action">
+                        <button id="delete" style="display: none;">Deletar</button>
+                        <button id="save">Salvar</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Formulário Add pessoa -->
+            <div id="popup-pessoa" style="display;">
+                <div id="add-pessoa-header">
+                    <button onclick="$('#popup-pessoa').hide(); $('#popup').show();" id="close"><img src="img/popup_exit.png"></button>
+                    <p id="add-pessoa-alert" style="display: none;"></p>
+                </div>
+
+                <input id="nome-pessoa" type="text" name="pessoaNome" placeholder="Nome">
+                <input id="email-pessoa" type="email" name="pessoaEmail" placeholder="Email">
+                <input id="tel-pessoa" type="tel" name="pessoaTelefone" placeholder="Telefone">
+                <button id="adicionar">Adicionar</button>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="/js/days.js"></script>
+        <script src="js/jQuery-Mask-Plugin-master/src/jquery.mask.js"></script>
+        {{!-- <script type="text/javascript" src="/js/getEventDays.js"></script> --}}
+        <script type="text/javascript" src="/js/form-evento.js"></script>
+        {{!-- <script type="text/javascript" src="/js/returnEventInfo.js"></script> --}}
+        <script type="text/javascript" src="/js/filtros.js"></script>
+
+        <script>
+            let hoje = new Date();
+            let ano = hoje.getFullYear();
+
+            //Coloca a mask de telefone no input #tel-pessoa//
+            $("#tel-pessoa").mask("(00) 00000-0000");
+
+            $('.calendar').calendar({
+                mode: "rangepicker"
+            });
+
+            //Seta o ano minimo, o ano de início e o ano máximo do calendário//
+            $('.calendar').calendar({
+                startYear: ano,
+                maxYear: ano + 50,
+                minYear: ano
+            });
+
+            //Ao carregar a página//
+            $(document).ready(function() 
+            {
+                let addEvent = document.getElementById("addEventButton");
+
+                addEvent.addEventListener("click", function()
+                {
+                    //Limpa o formulário de evento//
+                    clearFormEvent();
+
+                    //Muda a função do formulário de evento para salvar//
+                    $("#save").val("Salvar");
+
+                    //Adiciona o usuário atual como a primeira pessoa do evento//
+                    $("#list-pessoas").append("<div id='div-pessoa'><input id='pessoaToNotif' class='input-pessoa' name='dadosPessoa[]' value='<?php echo $nome; ?> - <?php echo $email; ?> - <?php echo $telefone; ?>' class='div' readonly></input><p id='delete-pessoa' class='delete-buttom' onClick='$(this).parent().remove();'>X</p></div>");
+
+                    //mostra o formulário de evento//
+                    hideThisShowAnother($("#list-events"), $("#form-evento"));
+                });
+            });
+        </script>
+    </div>
+</div>

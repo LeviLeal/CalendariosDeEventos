@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+</head>
+<body>
+
+{{#if success_msg}}
+<div class="alert alert-success text-center"> {{success_msg}}</div>
+{{/if}}
+
+{{#each erros}}
+<div class="alert alert-danger">{{texto}}</div>
+{{else}}
+{{/each}}
+	{{#if error}}
+    	<div class="alert alert-danger text-center">{{error}}</div>
+	{{/if}}
+	<h1 class="text-center mt-5">Calendário de Eventos</h1>
+	<div id="form" class="container d-flex justify-content-center p-4 mt-5 rounded border w-25 h-25">
+        <div class="w-75">
+			<h3 class="text-center">Fazer login</h3>	
+			<hr>
+			<form action="/usuario/logar" method="post">
+				{{!-- Usuario --}}
+				<input class="form-control p-2 mt-3" id='email' type="text" name="email" placeholder="E-mail" required>
+				{{!-- Senha --}}
+				<div class="border rounded d-flex mt-3">
+					<input class="form-control p-2 border-0" id="password" type="password" name="password" placeholder="Senha" required>
+					<img class="p-2" id="togglePasswordView" src="/img/bootstrap-icons/eye-fill.svg" alt="Mostrar/Esconder senha">
+				</div>
+				{{!-- Submit --}}
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-primary mt-3">Entrar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+<script src="js/forms.js"></script>
+<script>
+
+	let password = document.getElementById("password");
+	let togglePassViewBtn = document.getElementById('togglePasswordView');
+	togglePasswordView(togglePassViewBtn, password);
+</script>

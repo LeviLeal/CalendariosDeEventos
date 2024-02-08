@@ -1,0 +1,15 @@
+#password-form, #alert-submit, #status-nome, #status-email, #status-email-usado, #status-senha-size, #status-senha, #status-email {
+    display: none;
+}
+
+#main-div {
+    width: fit-content;
+}
+
+.disabled:focus {
+    cursor: text !important;
+}
+
+#passwordView, #conPasswordView {
+    cursor: pointer;
+}
